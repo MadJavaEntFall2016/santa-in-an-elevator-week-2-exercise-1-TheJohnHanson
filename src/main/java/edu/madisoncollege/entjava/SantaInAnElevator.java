@@ -1,5 +1,9 @@
 package edu.madisoncollege.entjava;
 
+import org.apache.log4j.Logger;
+import java.io.BufferedReader;
+import java.io.*;
+import java.util.*;
 
 /**
  * Created by paulawaite on 9/7/16.
@@ -36,6 +40,70 @@ package edu.madisoncollege.entjava;
  */
 
 public class SantaInAnElevator {
+
+    private final Logger logger = Logger.getLogger(this.getClass());
+
+    public SantaInAnElevator() {
+
+    }
+
+    private List<String> getMapDirections() {
+
+        List<String> mapDirections = new ArrayList<String>();
+
+        try {
+
+            ClassLoader loader = getClass().getClassLoader();
+            File map = new File(loader.getResource("SantaUpDown.txt").getFile());
+            BufferedReader mapReader = new BufferedReader( new FileReader(map));
+
+            while (mapReader.ready()) {
+                mapDirections = Arrays.asList(mapReader.readLine().split(""));
+            }
+
+            //logger.info("The String Array is: " + mapDirections);
+
+        } catch (FileNotFoundException fileNotFound) {
+            logger.info("The map file was not found");
+            fileNotFound.printStackTrace();
+        } catch (IOException ioException) {
+            logger.info("There was a problem reading the map");
+            ioException.printStackTrace();
+        }catch (Exception exception) {
+            logger.info("Something went very wrong when trying to find the map.");
+            exception.printStackTrace();
+        }
+
+        if (mapDirections.size() == 0) {
+            logger.info("There were no directions to read.");
+        }
+
+        return mapDirections;
+
+    }
+
+    private int decipherFloorNumberFromMapDirections(List<String> mapDirectionsList) {
+
+        int floorNumber = 0;
+
+        for(String direction : mapDirectionsList) {
+
+            if (direction.equals("(")) {
+                floorNumber ++;
+            } else {
+                floorNumber --;
+            }
+        }
+
+        return floorNumber;
+
+    }
+
+
+    public void logSantasDestination() {
+
+        logger.info("Santa's destination is floor number: " + decipherFloorNumberFromMapDirections(getMapDirections()));
+    }
 
 
 }

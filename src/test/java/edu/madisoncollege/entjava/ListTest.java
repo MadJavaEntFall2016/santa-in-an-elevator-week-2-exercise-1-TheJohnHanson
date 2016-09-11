@@ -39,4 +39,22 @@ public class ListTest {
     }
 
 
+    @Test
+    public void testRemove() {
+
+        myList.remove(2);
+        assertEquals("Failed to remove", 2, myList.size());
+    }
+
+    @Test
+    public void testGet() {
+        myList.get(0);
+        assertEquals("Failed to get item", "Item 1", myList.get(0));
+    }
+
+    @Test (expected = IndexOutOfBoundsException.class)
+    public void testIOException() {
+        myList.get(4);
+    }
 }
+
